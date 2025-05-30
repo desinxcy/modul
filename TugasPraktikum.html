@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form untuk pendaftaran mahasiswa</title>
+    <style>
+        img {
+            width: 120px;
+            height: 120px;
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            background-color: rgb(124, 227, 227);
+            margin-top: 75px;
+        }
+        fieldset {
+            margin: 12px;
+            border: 1px solid black;
+        }
+        textarea {
+            margin-left: 12px;
+        }
+        button {
+            margin-top: 8px;
+            margin-left: 12px;
+            margin-bottom: 10px;
+            background-color: blanchedalmond;
+        }
+    </style>
+</head>
+<body>
+    <img src="download.jpg" alt="logo Kampus">
+    <form action="TugasPraktikum.html" method="POST">
+        <h1>Formulir pendftaran</h1>    
+        <fieldset>
+            <legend>Nama dan Email</legend>
+            <label for="nama">Nama</label>
+            <input type="text" name="nama" id="nama" placeholder="Isi nama anda" required><br>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Isi email anda" required><br>
+        </fieldset>
+        <fieldset>
+            <legend>Jenis Kelamin</legend>
+            <label for="laki">Laki laki</label>
+            <input type="radio" name="laki" id="laki" value="laki">
+            <label for="perempuan">Perempuan</label>
+            <input type="radio" name="perempuan" id="perempuan" value="perempuan"><br>
+        </fieldset>
+        <fieldset>
+            <legend>Hobi</legend>
+            <label for="membaca">Membaca</label>
+            <input type="checkbox" id="membaca" value="membaca">
+            <label for="music">music</label>
+            <input type="checkbox" id="music" value="music"><br>
+        </fieldset>
+        <textarea name="alamat" id="alamat" placeholder="isi alamat anda" rows="2" cols="20"></textarea><br>
+
+        <button type="submit">Daftar</button>
+    </form>
+    <p>ini untuk mengunjungi situs <a href="https://www.stitek.ac.id"> STITEK</a></p>
+</body>
+</html>
