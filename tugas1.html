@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toko Elektronik Cepat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-image { width: 100%; max-height: 300px; object-fit: cover; }
+    .clickable { cursor: pointer; }
+
+    .arrow-btn {
+        background: none;
+        border: none;
+        font-size: 28px;
+        cursor: pointer;
+        color: #333;
+        padding: 5px 10px;
+    }
+
+    .arrow-btn:hover {
+        color: dodgerblue;
+    }
+    </style>
+</head>
+<body class="p-4">
+
+  <!-- Header -->
+  <div class="text-center mb-4">
+    <h1>Toko Traie</h1>
+    <p id="waktu-transaksi"></p>
+  </div>
+
+  <div class="row">
+    <!-- Display Produk Utama -->
+    <div class="col-md-6">
+      <div class="text-center">
+        <img id="gambar-produk" class="product-image mb-3" src="" alt="Produk">
+        <div>
+         <!-- Tombol tanpa background -->
+            <button class="arrow-btn me-2" onclick="gantiGambar(-1)">&#8592;</button>
+            <button class="arrow-btn" onclick="gantiGambar(1)">&#8594;</button>
+
+        </div>
+        <h3 id="nama-produk"></h3>
+        <h4 id="harga-produk"></h4>
+      </div>
+    </div>
+
+    <!-- Daftar Produk -->
+    <div class="col-md-6">
+      <h4>Daftar Produk:</h4>
+      <ul id="daftar-produk" class="list-group"></ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Form Pemesanan -->
+  <div class="mt-4">
+    <h4>Form Pemesanan</h4>
+    <form onsubmit="return prosesPesanan()">
+      <div class="mb-2">
+        <label>Nama Pemesan:</label>
+        <input type="text" id="nama-pemesan" class="form-control">
+      </div>
+      <div class="mb-2">
+        <label>Jumlah Pesanan:</label>
+        <input type="number" id="jumlah-pesan" class="form-control">
+      </div>
+      <div class="mb-2">
+        <label>Kode Promo:</label>
+        <input type="text" id="kode-promo" class="form-control">
+      </div>
+      <button type="submit" class="btn btn-primary mt-2">Pesan Sekarang</button>
+    </form>
+  </div>
+
+  <!-- Output -->
+  <div class="mt-4" id="output-pesanan"></div>
+
+  <script>
+    // Data Produk
+    const produk = [
+      {
+        nama: "Laptop Asus Duo Zephyrus",
+        harga: 10000000,
+        gambar: ["ss/laptop.jpg", "ss/laptop2.jpg"]
+      },
+      {
+        nama: "Nothing Phone",
+        harga: 250000,
+        gambar: ["ss/hp1.jpg", "ss/hp2.jpg"]
+      },
+      {
+        nama: "watch fit 3",
+        harga: 1800000,
+        gambar: ["ss/smart.jpg"]
+      }
+    ];
+
+    let indexProdukAktif = 0;
+    let indexGambarAktif = 0;
+
+    // Tampilkan Waktu Sekarang
+    function updateWaktu() {
+      const now = new Date();
+      document.getElementById("waktu-transaksi").innerText = now.toLocaleString();
+    }
+    setInterval(updateWaktu, 1000);
+    updateWaktu();
+
+    // Tampilkan Produk Utama
+    function tampilkanProduk() {
+      const p = produk[indexProdukAktif];
+      document.getElementById("gambar-produk").src = p.gambar[indexGambarAktif];
+      document.getElementById("nama-produk").innerText = p.nama;
+      document.getElementById("harga-produk").innerText = "Rp " + p.harga.toLocaleString();
+    }
+
+    function gantiGambar(arah) {
+      const gambarArray = produk[indexProdukAktif].gambar;
+      indexGambarAktif = (indexGambarAktif + arah + gambarArray.length) % gambarArray.length;
+      tampilkanProduk();
+    }
+
+    // Daftar Produk
+    function tampilkanDaftarProduk() {
+      const list = document.getElementById("daftar-produk");
+      list.innerHTML = "";
+      produk.forEach((item, i) => {
+        const li = document.createElement("li");
+        li.innerText = item.nama + " - Rp " + item.harga.toLocaleString();
+        li.className = "list-group-item clickable";
+        li.onclick = function() {
+          indexProdukAktif = i;
+          indexGambarAktif = 0;
+          tampilkanProduk();
+        };
+        list.appendChild(li);
+      });
+    }
+
+    // Proses Pemesanan
+    function prosesPesanan() {
+      const nama = document.getElementById("nama-pemesan").value.trim();
+      const jumlah = parseInt(document.getElementById("jumlah-pesan").value);
+      const kodePromo = document.getElementById("kode-promo").value.trim().toUpperCase();
+
+      if (!nama || isNaN(jumlah) || jumlah <= 0) {
+        alert("Nama dan jumlah pesanan harus diisi dengan benar!");
+        return false;
+      }
+
+      const produkDipilih = produk[indexProdukAktif];
+      const subtotal = produkDipilih.harga * jumlah;
+      let potongan = 0;
+
+      if (kodePromo === "DISKON10") {
+        potongan = subtotal * 0.1;
+      }
+
+      const totalAkhir = subtotal - potongan;
+      const orderId = "INV-" + Math.floor(10000 + Math.random() * 90000);
+
+      // Output Ringkasan
+      document.getElementById("output-pesanan").innerHTML = `
+        <h5>Ringkasan Pesanan:</h5>
+        <p><strong>Order ID:</strong> ${orderId}</p>
+        <p><strong>Nama:</strong> ${nama}</p>
+        <p><strong>Produk:</strong> ${produkDipilih.nama}</p>
+        <p><strong>Jumlah:</strong> ${jumlah}</p>
+        <p><strong>Subtotal:</strong> Rp ${subtotal.toLocaleString()}</p>
+        <p><strong>Potongan:</strong> Rp ${potongan.toLocaleString()}</p>
+        <p><strong>Total Akhir:</strong> Rp ${totalAkhir.toLocaleString()}</p>
+      `;
+
+      return false;
+    }
+
+    // Inisialisasi
+    tampilkanProduk();
+    tampilkanDaftarProduk();
+  </script>
+</body>
+</html>
